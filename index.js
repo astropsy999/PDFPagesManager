@@ -4,15 +4,22 @@ fs = require('fs');
 
 async function removePages(filename) {
     const letters = await PDFDocument.load(readFileSync(`./${filename}`));
-    console.log(letters)
+    // console.log(`${filename}${letters.getPageCount()}`)
+
+    for (let i = 1; i < letters.getPageCount();) {
+
+        if(i !== 1 || i !== 3) {
+            console.log(i)
+            letters.removePage(i);
+            i++
+        }
+    }
     // letters.removePage(4);
-
-
-    // writeFileSync(`_${filename}`, await letters.save());
+    writeFileSync(`_${filename}`, await letters.save());
 
     // console.log(`${file} has ${letters.getPageCount()} pages`)
     // letters.removePage();
-    // writeFileSync(`${file}_`, await letters.save());
+    // writeFileSync(`_${filename}`, await letters.save());
 }
 
 
@@ -30,6 +37,7 @@ try {
                 // console.log(`Finded file: ${file}`);
 
                 removePages(file).catch((err) => console.log(err));
+
                 // removePage().catch((err) => console.log(err));
                 // fs.unlinkSync(path + file)
             }

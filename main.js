@@ -4,25 +4,44 @@ fs = require('fs');
 
 async function removePages(filename) {
     const letters = await PDFDocument.load(readFileSync(`./${filename}`));
-    // console.log(`${filename}${letters.getPageCount()}`)
+    console.log(`${filename}${letters.getPageCount()}`)
 
-    for (let i = 1; i < letters.getPageCount();) {
+    if(letters.getPageCount() === 5) {
 
-        if(i !== 1 || i !== 3) {
-            console.log(i)
+    for (let i = 1; i < letters.getPageCount();i++) {
+
+        if(i !== 1) {
+            // console.log(i)
             letters.removePage(i);
-            i++
         }
+        if(i !== 3) {
+            letters.removePage(i);
+        }
+
     }
-    // letters.removePage(4);
     writeFileSync(`_${filename}`, await letters.save());
 
-    // console.log(`${file} has ${letters.getPageCount()} pages`)
-    // letters.removePage();
-    // writeFileSync(`_${filename}`, await letters.save());
+    }
+    if (letters.getPageCount() === 4) {
+
+                letters.removePage(1);
+                letters.removePage(2);
+
+        writeFileSync(`_${filename}`, await letters.save());
+    }
+    if (letters.getPageCount() === 6) {
+
+        letters.removePage(5);
+        letters.removePage(4);
+        letters.removePage(3);
+        letters.removePage(1);
+        // letters.removePage(2);
+
+        writeFileSync(`_${filename}`, await letters.save());
+    }
+
+
 }
-
-
 
 try {
     path = './'
@@ -34,11 +53,9 @@ try {
         files.forEach((file) => {
             // Check if the file is with a PDF extension
             if (file.split('.').pop().toLowerCase() == 'pdf') {
-                // console.log(`Finded file: ${file}`);
 
                 removePages(file).catch((err) => console.log(err));
 
-                // removePage().catch((err) => console.log(err));
                 // fs.unlinkSync(path + file)
             }
         });

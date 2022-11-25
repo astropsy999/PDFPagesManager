@@ -57,8 +57,12 @@ try {
         // getDirectories(path+dir+'/Схемы трубопровода')
 
         const currPath = path+dir+'/Схемы трубопровода/'
+        const currPath1 = path+dir+'/Схемы трубопроводов/'
 
-        if(fs.existsSync(currPath.slice(0, -3))) {
+
+
+
+        if(fs.existsSync(currPath)) {
 
         // Read the directory given in `path`
         const files = fs.readdir(currPath, (err, files) => {
@@ -75,6 +79,21 @@ try {
                 }
             });
         });
+        } else if (fs.existsSync(currPath1)) {
+            const files = fs.readdir(currPath1, (err, files) => {
+                if (err)
+                    throw err;
+
+                files.forEach((file) => {
+                    // Check if the file is with a PDF extension
+                    if (file.split('.').pop().toLowerCase() == 'pdf') {
+
+                        removePages(file, currPath1).catch((err) => console.log(err));
+
+                        // fs.unlinkSync(path + file)
+                    }
+                });
+            });
         }
 
         console.log(`Папка ${dir} - готово`)
